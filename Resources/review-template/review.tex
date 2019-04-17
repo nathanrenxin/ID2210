@@ -1,0 +1,95 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{lipsum}
+\newbox\one
+\newbox\two
+\long\def\weakOrStrongPt#1{%
+    \setbox\one=\vbox {%
+       \lipsum%
+     }
+   \setbox\two=\vsplit\one to #1\baselineskip
+   \unvbox\two}
+   
+   
+   
+\begin{document}
+
+\title{Test}
+
+
+% author names and affiliations
+% use a multiple column layout for up to three different
+% affiliations
+\author{\IEEEauthorblockN{Name 1 }
+\and
+\IEEEauthorblockN{Name 2}
+}
+\maketitle
+\IEEEpeerreviewmaketitle
+
+
+
+\section{Motivation}
+
+\lipsum[2] \cite{IEEEhowto:kopka}
+
+\section{Contributions}
+
+\lipsum[2]
+
+\section{Solution}
+
+\lipsum[2-5]
+
+\section{Strong Points}
+
+\begin{enumerate}
+ \item Three to four strong points about the paper. Three to four strong points about the paper. Three to four strong points about the paper. Three to four strong points about the paper.
+ \item Three to four strong points about the paper. Three to four strong points about the paper. Three to four strong points about the paper. Three to four strong points about the paper.
+ \item Three to four strong points about the paper. Three to four strong points about the paper. Three to four strong points about the paper. Three to four strong points about the paper.
+\end{enumerate}
+
+
+\section{Weak Points}
+\begin{enumerate}
+\item Three to four weak points about the paper.Three to four weak points about the paper.Three to four weak points about the paper.Three to four weak points about the paper.
+\item Three to four weak points about the paper.Three to four weak points about the paper.Three to four weak points about the paper.Three to four weak points about the paper.
+\item Three to four weak points about the paper.Three to four weak points about the paper.Three to four weak points about the paper.Three to four weak points about the paper.
+\end{enumerate}
+
+
+
+\section{Questions}
+
+\subsection{Question 1}
+
+\lipsum[2]
+
+
+\subsection{Question 2}
+\lipsum[2]
+
+
+
+
+
+
+
+\begin{thebibliography}{1}
+
+\bibitem{IEEEhowto:kopka}
+H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
+  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
+
+
+
+
+
+\end{thebibliography}
+
+
+
+
+% that's all folks
+\end{document}
+
+

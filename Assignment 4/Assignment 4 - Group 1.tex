@@ -1,0 +1,95 @@
+\documentclass[conference]{IEEEtran}
+\bibliographystyle{plain}
+\usepackage{lipsum}
+\newbox\one
+\newbox\two
+\long\def\weakOrStrongPt#1{%
+    \setbox\one=\vbox {%
+       \lipsum%
+     }
+   \setbox\two=\vsplit\one to #1\baselineskip
+   \unvbox\two}
+
+
+
+\begin{document}
+
+\title{T-Man: Gossip-based Overlay Topology Management}
+
+
+% author names and affiliations
+% use a multiple column layout for up to three different
+% affiliations
+\author{\IEEEauthorblockN{Bernardo Gonzalez Riede}
+\and
+\IEEEauthorblockN{Xin Ren}
+}
+\maketitle
+\IEEEpeerreviewmaketitle
+
+
+
+\section{Motivation}
+
+The author clearly stated the motivation of the paper. In large, dynamic, fully distributed systems, such as peer-to-peer (P2P) networks, overlay topology forms the basis for, or has a major impact on many functions. It is well known that functions such as searching, routing, information dissemination, data aggregation, etc, need special topologies for good performance and high efficiency. Furthermore, solutions to other problems including sorting and clustering can be readily expressed as topologies. So it is necessary to have efficient and robust algorithms to create, maintain and optimize the topology, especially when there is high churn rate in the system.
+
+\section{Contributions}
+
+The contributions of the paper is also quite clear. A generic protocol, T-Man, for topology management is proposed which is robust, scalable, flexible, simple, general and fast. It is simple to implement, debug and understand. It is flexible enough to allow for changing the managed topology at run time on demand, without having to develop a new protocol for each possible topology from scratch, and also supports quickly changing topologies. It is general enough to support a wide range of different topologies and be applied as an off-the-shelf component for prototyping or even as a production solution that could be implemented even before the final desired topology is known. Finally, with logarithmic convergence times it is fast so that it is possible to construct a topology quickly from scratch (recovery from massive failures or bootstrapping other protocols on demand) or where topology maintenance is in fact equivalent to the continuous re-creation of the topology (for example, due to massive churn).
+
+\section{Solution}
+The proposed solution is suited for large systems for it is based on gossip communication.
+Moreover, its impact and need is inversely proportional to the desired amount of neighbours \emph{c} which is uniform.
+On a high level, T-Man works by applying a \emph{ranking} function to a changing set of known nodes, thereafter selecting the first \emph{c} nodes as neighbours. This ranking and rewiring  happens periodically which allows for the introduction of \emph{cycles} as a notion for measurement of convergence.
+
+When a node \emph{q} initiates an exchange, it communicates with its first neighbour \emph{p} according to the ranking function to be able to generate a set of know nodes composed of:
+\begin{itemize}
+    \item Set of neighbours of q.
+    \item Set of neighbours of p.
+    \item Set of random nodes known by p through a \emph{peer sampling service}\cite{10.1007/978-3-540-30229-2_5}
+\end{itemize}
+This selection of a new set of neighbours can happen as a result of an \emph{active} or \emph{passive} exchange.
+After a configured time \emph{T} a neighbour starts an exchange actively while it reacts to some passively.
+A cycle is therefore defined as T/2, each node participating in one active and one passive exchange on average in each cycle.
+
+The ranking function is deeply tied to the desired outcome and needs information, i.e. a profile, about each node.
+The profile needed for ranking has to be included in the information exchange by the nodes.
+T-Man being flexible, the entity deploying the topology has to carefully develop its necessary ranking.
+A common ranking used is distance based ranking, but can create problems if no refinement is done when using highly clustered nodes.
+Depending on the size of \emph{c}, it may happen that the nodes connect only to other nodes in the cluster thus not knowing about the rest of the network.
+To be able to cope with churn, the generic component is extended to provide self-healing.
+Self-healing takes place by including an age field in the profile which has to be considered while ranking the known nodes.
+Finally, \emph{H} last (oldest) nodes are dropped as set of known nodes.
+The experimental results indicate a value of 1 for \emph{H} to be often the optimal one.
+
+
+
+
+
+\section{Strong Points}
+
+\begin{enumerate}
+\item References are well listed and noted.
+\item Detailed description on the problem makes it easy to understand.
+\item When viewing the paper digitally, the graphs in Fig. 3 are intuitive through the use of patterns to group related graphs.
+\item Treating the very important clustering issue and providing a solution to it.
+\end{enumerate}
+
+
+\section{Weak Points}
+\begin{enumerate}
+\item It would be more convincing if there is data or graph provided for the optimizations of the solution.
+\item On printed paper, the graphs in Fig. 3 are difficult to distinguish.
+\item Self-healing reads like an optimization and should be mentioned in section 3.2.
+\end{enumerate}
+
+
+
+
+\bibliography{10.10072F978-3-540-30229-2_5}
+
+
+
+
+% that's all folks
+\end{document}

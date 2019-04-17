@@ -1,0 +1,96 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{lipsum}
+\newbox\one
+\newbox\two
+\long\def\weakOrStrongPt#1{%
+    \setbox\one=\vbox {%
+       \lipsum%
+     }
+   \setbox\two=\vsplit\one to #1\baselineskip
+   \unvbox\two}
+   
+   
+   
+\begin{document}
+
+\title{Do incentives build robustness in BitTorrent?}
+
+
+% author names and affiliations
+% use a multiple column layout for up to three different
+% affiliations
+\author{\IEEEauthorblockN{Bernardo Gonzalez Riede}
+\and
+\IEEEauthorblockN{Xin Ren}
+}
+\maketitle
+\IEEEpeerreviewmaketitle
+
+
+
+\section{Motivation}
+The main motivation for the authors was the fallacy of previous works.
+Previous works have been executed in synthetic or small environments with conclusions reflecting said settings.
+This lead to the acceptance of BitTorrent's incentive model as correct where peers with higher capacity are rewarded through higher download speeds.
+Given the existence of altruism in the network, the authors expect a \emph{strategic} client to be able to exploit it.
+Proofing such an exploit would change the perception of the incentive in BitTorrent.
+
+
+\section{Contributions}
+The lesser contribution is the data amassed from analyzing different swarms.
+Data gained from the analysis is depicted in several graphics with a common tendency; high capacity peers don't receive benefits proportional to their contributions.
+A root cause for this is optimistic unchoking which pairs high capacity peers with low ones.
+Moreover, the caveats of the reference implementation at the time of writing the paper are defined and through a custom implementation improved.
+The insight gained from studying swarm's behaviours is transformed to build a strategic client which maximizes its download capacity by exploiting the existent altruism in the network/swarms.
+
+Regardless of the possibility of strategic clients an important fact is conveyed indirectly.
+\emph{High capacity peers are of considerably importance for (initial) distribution}.
+
+
+
+\section{Solution}
+
+Based on a distribution of upload capacity of over 300,000 unique IP addresses, by presenting expected TFT matching time, the expectation of reciprocation probability and the expected download rate as functions of upload capacity, potential sources of altruism are suggested to come from high capacity peers. Altruism is then defined as the difference between expected upload rate and download rate or any upload contribution that can be withdrawn without loss in download performance.
+
+With altruism defined, the BitTyrant algorithm is developed. Each host, for each peer p, maintains estimates of expected download performance $d_p$ and upload required for reciprocation $u_p$. Each TFT round, each host ranks peers by the ratio $d_p$/$u_p$ and unchokes those of top rank until the upload capacity is reached. $d_p$ is initially the expected equal split capacity of p, and at the end of each round for each unchoked peer, if p unchokes the host, $d_p$ is updated to the observed download rate from p. $u_p$ is initially the rate just above the step in the reciprocation probability and then periodically updated depending on whether p reciprocates for an offered rate, that is at the end of each round, if p does not unchoke the host, $u_p$ increases by a configurable ratio, while if p has unchoked the host for certain configurable rounds, $u_p$ decreases by another configurable ratio. The algorithm can be easily generalized to handle concurrent downloads from multiple swarms by ordering the $d_p$/$u_p$ ratios of all connections across swarms.
+
+The strategic BitTyrant client allows to dynamically resize its active set and vary the sending rate per connection to maximize reciprocation bandwidth per connection and number of reciprocating peers, so that the performance of the client is improved, especially for high capacity peers. According to the algorithm, high capacity peers would need a large size of active set, which means the need to increase the local neighborhood size. This is achieved by requesting as many peers as possible from the centralized tracker at the maximum allowed frequency and increasing the query rate of the DHT-based distributed tracker recently incorporated by the BitTorrent protocol.
+
+To evaluate BitTyrant, experiments were executed with a single strategic peer in synthetic and current real world swarms as well as BitTyrant used by all participants in synthetic swarms. The single strategic peer experiment explores the performance of a single strategic peer by comparing its downloading time to that of an unmodified Azureus client in same swarms, while the experiment with BitTyrant used by all participants explores swarm performance by comparing the downloading time in swarm full of strategic peers and both strategic and selfish peers to that in swarm with only unmodified peers.
+
+\section{Strong Points}
+
+\begin{enumerate}
+ \item The differences between the paper and other related work are clearly stated.
+ \item References are well listed and noted with hyperlinks.
+ \item Predicts readers' thoughts and mentions topics which cover difficulties \& downsides later on.
+\end{enumerate}
+
+
+\section{Weak Points}
+\begin{enumerate}
+\item The repetitions of the experiments are not mentioned.
+\item There exists an interesting point at an upload capacity of around 48 KB/s which is repeated in several graphs though the paper sheds no light on its peculiarity.  
+\item Blocks are mentioned but no explained in the \emph{Bitcoin overview} section. Especially why only blocks matter and not pieces.
+\end{enumerate}
+
+
+
+\section{Questions}
+
+\subsection{Briefly explain the most important piece selection policy used by BitTorrent to improve piece diversity, and how this policy helps reduce download times.}
+
+Answer:
+
+The rarest first algorithm works as follows. Each peer maintains a list of the number of copies of each piece in its peer set. It uses this information to define a rarest pieces set. Let m be the number of copies of the rarest piece, then the index of each piece with m copies in the peer set is added to the rarest pieces set. The rarest pieces set of a peer is updated each time a copy of a piece is added to or removed from its peer set. Each peer selects the next piece to download at random in its rarest pieces set.
+
+If peers download the file sequentially then the pieces at the end of the file would become rare and might get lost if peers that have it leave the network. By increasing availability the chance of having to wait for a piece because of unavailability or overload on the few nodes which have such a piece.
+
+
+
+
+
+% that's all folks
+\end{document}
+
+

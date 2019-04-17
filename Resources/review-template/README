@@ -1,0 +1,3 @@
+put your text in the review.tex file and use the "pdflatex review.tex" to compile the tex 
+
+If you are not familiar with latex then you can also download the IEEE Transactions paper template for Microsoft Word from https://www.ieee.org/publications_standards/publications/authors/author_templates.html
